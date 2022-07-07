@@ -4,7 +4,7 @@ const fs = require('fs/promises')
 require("./wasm_exec")
 
 const port = process.env.PLANETOID_HTTP_PORT || 8080
-let wamModule = process.argv[2]
+let wasmModule = process.argv[2]
 
 function runWasm(wasmFile, args) {
   const go = new Go()
@@ -40,12 +40,13 @@ const requestHandler = (request, response) => {
 
 }
 
-fs.readFile(wamModule)
+fs.readFile(wasmModule)
   .then(wasmFile => runWasm(wasmFile))
   .then(wasm => {
 
-    console.log("wasm module loaded")
     //console.log(Handle("Jane Doe"))
+
+    console.log("wasm module loaded")
 
     const server = http.createServer(requestHandler)
 
@@ -55,6 +56,7 @@ fs.readFile(wamModule)
       }
       console.log(`🌍 serving on ${port}`)
     })
+
 
 
 
