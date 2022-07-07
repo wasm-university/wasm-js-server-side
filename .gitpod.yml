@@ -19,6 +19,9 @@ tasks:
       source /home/gitpod/.wasmedge/env
       wasmedge --version
 
+      echo 'BUN_INSTALL="/home/gitpod/.bun"' >> $HOME/.bashrc
+      echo 'PATH="$BUN_INSTALL/bin:$PATH"' >> $HOME/.bashrc
+
     init: |
       echo "🚀 initialize"
       #npm install

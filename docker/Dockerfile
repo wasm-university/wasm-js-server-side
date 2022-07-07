@@ -57,3 +57,7 @@ RUN curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/i
     curl https://get.wasmer.io -sSfL | sh && \
     curl https://wasmtime.dev/install.sh -sSf | bash
 
+# ------------------------------------
+# Install Bun
+# ------------------------------------
+RUN curl https://bun.sh/install | bash
