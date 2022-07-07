@@ -60,4 +60,6 @@ RUN curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/i
 # ------------------------------------
 # Install Bun
 # ------------------------------------
-RUN curl https://bun.sh/install | bash
+RUN curl https://bun.sh/install | bash && \
+    echo 'export BUN_INSTALL="/home/gitpod/.bun"' >> $HOME/.bashrc && \
+    echo 'export PATH="$BUN_INSTALL/bin:$PATH"' >> $HOME/.bashrc

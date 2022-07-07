@@ -1,4 +1,4 @@
-image: k33g/wasm-js-server-side:0.0.0
+image: k33g/wasm-js-server-side:0.0.2
 
 tasks:
   - name: initialize
@@ -19,8 +19,8 @@ tasks:
       source /home/gitpod/.wasmedge/env
       wasmedge --version
 
-      echo 'BUN_INSTALL="/home/gitpod/.bun"' >> $HOME/.bashrc
-      echo 'PATH="$BUN_INSTALL/bin:$PATH"' >> $HOME/.bashrc
+      echo 'export BUN_INSTALL="/home/gitpod/.bun"' >> $HOME/.bashrc
+      echo 'export PATH="$BUN_INSTALL/bin:$PATH"' >> $HOME/.bashrc
 
     init: |
       echo "🚀 initialize"
