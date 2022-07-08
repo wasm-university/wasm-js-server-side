@@ -7,17 +7,18 @@ const go = new Go()
 // 🖐️ hack for tiny go
 go.importObject.env["syscall/js.finalizeRef"] = () => {}
 
-WebAssembly.instantiate(fs.readFileSync(wasmModule), go.importObject)
+let prm = WebAssembly.instantiate(fs.readFileSync(wasmModule), go.importObject)
 .then(result => {
   go.run(result.instance)
   console.log(Handle("Jane Doe"))
+  return result
 })
 .catch(error => {
   console.log("😡", error)
 })
 
 
-
+console.log(prm)
 
 
 
