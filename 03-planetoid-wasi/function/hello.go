@@ -2,7 +2,10 @@ package main
 
 import (
 	"fmt"
+  "github.com/wasm-university/wasm-js-server-side/03-planetoid-wasi/function/helpers"
+
 )
+
 
 // Declare a main function, this is the entrypoint into our go module
 // That will be run. In our example, we won't need this
@@ -22,9 +25,16 @@ func add(x int, y int) int {
 }
 
 //export hello
-func hello() *[]uint8 {
-  msg := "hello"
-  newStr := []uint8(msg)
-	return &newStr
+func hello(parameters *int32) *byte {
+	name := helpers.FromInt32PtrToString(parameters)
+  fmt.Println(name)
+	returnValue := "Hello " + name
+	return helpers.FromStringToBytePtr(returnValue)
 }
 
+
+//export hey
+func hey() *byte {
+	returnValue := "Hello World"
+	return helpers.FromStringToBytePtr(returnValue)
+}
