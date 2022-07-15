@@ -33,7 +33,7 @@ function readString(ptr, len, instance) {
 
   let yoValue = instance.exports.yo()
 
-
+  let pingValue = instance.exports.ping()
   //const values = new Uint32Array(memory.buffer);
   //console.log(values[0]);
 
@@ -49,6 +49,9 @@ function readString(ptr, len, instance) {
   const str3 = new TextDecoder("utf8").decode(buffer3)
   console.log(`📝🤗: ${str3}`)
 
+  const buffer4 = new Uint8Array(memory.buffer, pingValue, 20)
+  const str4 = new TextDecoder("utf8").decode(buffer4)
+  console.log(`📝🤗: ${str4}😁`)
 
 })();
 

@@ -45,8 +45,11 @@ func yo() *byte {
   return &(([]byte)("yo man ....")[0])
 }
 
-//export yo
+//export ping
 func ping() *byte {
-  message := "pong";
-  return &(([]byte)(message)[0])
+  var myarray [20]byte
+  copy(myarray[:], "pong")
+
+  return &(myarray[0])
 }
+
