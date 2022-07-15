@@ -45,3 +45,8 @@ func yo() *byte {
   return &(([]byte)("yo man ....")[0])
 }
 
+//export yo
+func ping() *byte {
+  message := "pong";
+  return &(([]byte)(message)[0])
+}
