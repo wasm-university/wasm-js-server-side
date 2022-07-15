@@ -47,9 +47,10 @@ func yo() *byte {
 
 //export ping
 func ping() *byte {
-  var myarray [20]byte
+  var myarray [20]byte //arbitrary length
   copy(myarray[:], "pong")
 
+  // comment récupérer la longeur ?
   return &(myarray[0])
 }
 
