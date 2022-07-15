@@ -25,6 +25,7 @@ func FromInt32PtrToString(value *int32) string {
 	return output
 }
 
+
 // Return byte pointer
 // Used to transform the string result to pointer, to "send" the result to the host
 func FromStringToBytePtr(returnValue string) *byte {

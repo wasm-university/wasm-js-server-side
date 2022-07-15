@@ -24,6 +24,7 @@ func add(x int, y int) int {
   return x + y;
 }
 
+// pointer sur la position en mémoire (à vérifier)
 //export hello
 func hello(parameters *int32) *byte {
 	name := helpers.FromInt32PtrToString(parameters)
@@ -38,3 +39,9 @@ func hey() *byte {
 	returnValue := "Hello World"
 	return helpers.FromStringToBytePtr(returnValue)
 }
+
+//export yo
+func yo() *byte {
+  return &(([]byte)("yo man ....")[0])
+}
+

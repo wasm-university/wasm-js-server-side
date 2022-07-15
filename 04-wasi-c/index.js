@@ -15,39 +15,22 @@ function readString(ptr, len, instance) {
 
 (async () => {
   const wasm = await WebAssembly.compile(
-    fs.readFileSync("./function/hello.wasm")
+    fs.readFileSync("./main.wasm")
   );
   const instance = await WebAssembly.instantiate(wasm, importObject);
 
   wasi.start(instance);
   //console.log(instance)
-  console.log(instance.exports.add(1,23))
-  //console.log(instance.exports.hello("Sam")) // BigInt
+  console.log(instance.exports.power(2,5))
 
-  let helloValue = instance.exports.hello("Sam")
-  let heyValue = instance.exports.hey()
+  let heyValue = instance.exports.greet()
   let memory = instance.exports.memory
 
   console.log(memory.buffer)
 
-
-  let yoValue = instance.exports.yo()
-
-
-  //const values = new Uint32Array(memory.buffer);
-  //console.log(values[0]);
-
-  const buffer = new Uint8Array(memory.buffer, heyValue, 11)
+  const buffer = new Uint8Array(memory.buffer, heyValue, 12)
   const str = new TextDecoder("utf8").decode(buffer)
   console.log(`📝: ${str}`)
-
-  const buffer2 = new Uint8Array(memory.buffer, helloValue, 9)
-  const str2 = new TextDecoder("utf8").decode(buffer2)
-  console.log(`📝: ${str2}`)
-
-  const buffer3 = new Uint8Array(memory.buffer, yoValue, 11)
-  const str3 = new TextDecoder("utf8").decode(buffer3)
-  console.log(`📝🤗: ${str3}`)
 
 
 })();
