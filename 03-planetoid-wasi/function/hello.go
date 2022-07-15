@@ -10,7 +10,7 @@ import (
 // Declare a main function, this is the entrypoint into our go module
 // That will be run. In our example, we won't need this
 func main() {
-  fmt.Println("yo")
+  fmt.Println("👋 hello from the main method")
 }
 
 
