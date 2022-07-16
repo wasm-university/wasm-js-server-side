@@ -35,6 +35,7 @@ function getMemoryAddressFor(text, moduleInstance) {
   return addr
 }
 
+console.log(importObject);
 
 (async () => {
   const wasm = await WebAssembly.compile(
