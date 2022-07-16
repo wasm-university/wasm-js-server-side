@@ -1,10 +1,11 @@
 package main
 
-var buf [1024]byte
+
 
 //Alloc(?)
 //export getBuffer
 func getBuffer() *byte {
+  var buf [1024]byte
 	return &buf[0]
 }
 
@@ -12,15 +13,17 @@ func main() {
 
 }
 
+
 //export Handle
 func Handle(parameter string) *byte {
 
-	var returnedValue [30]byte //arbitrary length
+  returnedValue := "👋 Hello :"+parameter
 
-	copy(returnedValue[:], "👋 Hello :"+parameter)
-	return &(returnedValue[0])
+  return &(([]byte)(returnedValue)[0])
 }
 
 /*
 curl -d "bob morane" -X POST  http://localhost:8080
+curl -d "bob morane and bill ballantine" -X POST  http://localhost:8080
+curl -d "Irma Vep" -X POST  http://localhost:8080
 */

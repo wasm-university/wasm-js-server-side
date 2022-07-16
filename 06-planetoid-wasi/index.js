@@ -15,7 +15,7 @@ function getMemoryAddressFor(text, moduleInstance) {
   let addr = moduleInstance.exports.getBuffer()
   let buffer = moduleInstance.exports.memory.buffer
 
-  let mem = new Int8Array(buffer)
+  let mem = new Uint8Array(buffer)
   let view = mem.subarray(addr, addr + text.length)
 
   for (let i = 0; i < text.length; i++) {
@@ -30,7 +30,7 @@ function getMemoryAddressFor(text, moduleInstance) {
 /*
 
 */
-
+// does not run correctly
 function copyMemory(text, moduleInstance) {
   // the `alloc` function returns an offset in
   // the module's memory to the start of the block
@@ -56,7 +56,6 @@ function copyMemory(text, moduleInstance) {
 
   wasi.start(moduleInstance);
 
-  let memory = moduleInstance.exports.memory //🤔
 
 
   const requestHandler = (request, response) => {
@@ -71,13 +70,19 @@ function copyMemory(text, moduleInstance) {
       //TODO: handle exceptions
 
       // call the function
-      let handleValue = moduleInstance.exports.Handle(copyMemory(body, moduleInstance), body.length)
+      // copy memory allow to pass data to the wasm module
+      let memory = moduleInstance.exports.memory //🤔
 
-      const buffer = new Uint8Array(memory.buffer, handleValue, 30)
+      let handleValue = moduleInstance.exports.Handle(getMemoryAddressFor(body, moduleInstance), body.length)
+
+
+
+      const buffer = new Uint8Array(memory.buffer, handleValue, 100)
+      //const buffer = new Uint8Array(memory.buffer, handleValue)
       const str = new TextDecoder("utf8").decode(buffer)
 
 
-      response.end(JSON.stringify(str))
+      response.end(JSON.stringify(str.split("\u0000")[0]))
     })
 
   }
