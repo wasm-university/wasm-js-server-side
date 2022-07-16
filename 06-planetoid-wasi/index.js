@@ -8,7 +8,7 @@ const importObject = { wasi_snapshot_preview1: wasi.wasiImport };
 const http = require('http');
 const port = process.env.PLANETOID_HTTP_PORT || 8080
 
-
+//old
 function getMemoryAddressFor(text, moduleInstance) {
 
   // Get the address of the writable memory.
@@ -25,6 +25,27 @@ function getMemoryAddressFor(text, moduleInstance) {
   // Return the address we started at.
   return addr
 }
+// see: https://radu-matei.com/blog/practical-guide-to-wasm-memory/#exchanging-strings-between-modules-and-runtimes
+
+/*
+
+*/
+
+function copyMemory(text, moduleInstance) {
+  // the `alloc` function returns an offset in
+  // the module's memory to the start of the block
+  var ptr = moduleInstance.exports.getBuffer();
+  // create a typed `ArrayBuffer` at `ptr` of proper size
+  var mem = new Uint8Array(moduleInstance.exports.memory.buffer, ptr, text.length);
+  // copy the content of `data` into the memory buffer
+  mem.set(new Uint8Array(text));
+  // return the pointer
+  return ptr;
+}
+
+
+
+// Liberer la mémoire
 
 
 (async () => {
@@ -34,6 +55,9 @@ function getMemoryAddressFor(text, moduleInstance) {
   const moduleInstance = await WebAssembly.instantiate(wasm, importObject);
 
   wasi.start(moduleInstance);
+
+  let memory = moduleInstance.exports.memory //🤔
+
 
   const requestHandler = (request, response) => {
     response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'})
@@ -47,10 +71,9 @@ function getMemoryAddressFor(text, moduleInstance) {
       //TODO: handle exceptions
 
       // call the function
-      let handleValue = moduleInstance.exports.Handle(getMemoryAddressFor(body, moduleInstance), body.length)
-      let memory = moduleInstance.exports.memory
+      let handleValue = moduleInstance.exports.Handle(copyMemory(body, moduleInstance), body.length)
 
-      const buffer = new Uint8Array(memory.buffer, handleValue, 100)
+      const buffer = new Uint8Array(memory.buffer, handleValue, 30)
       const str = new TextDecoder("utf8").decode(buffer)
 
 
