@@ -8,6 +8,10 @@ const importObject = { wasi_snapshot_preview1: wasi.wasiImport };
 const http = require('http');
 const port = process.env.PLANETOID_HTTP_PORT || 8080
 
+//console.log(wasi.wasiImport)
+console.log(importObject)
+
+
 //old
 function getMemoryAddressFor(text, moduleInstance) {
 
