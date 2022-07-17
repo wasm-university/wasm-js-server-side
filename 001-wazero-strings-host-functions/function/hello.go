@@ -29,7 +29,7 @@ func host_log(ptr uint32, size uint32)
 func host_fourtyTwo() uint64
 
 //export host_tada
-func host_tada() string
+func host_tada() uint32
 
 
 // helloWorld is a WebAssembly export that accepts a string pointer (linear memory
@@ -38,7 +38,9 @@ func host_tada() string
 func helloWorld(ptr, size uint32) {
 	name := ptrToString(ptr, size)
 
-	log("wasm >> 🖐️ hello world 🌍 " + name + " " +  strconv.FormatUint(host_fourtyTwo(), 10) + " " + host_tada())
+  tada_message := host_tada()
+
+	log("wasm >> 🖐️ hello world 🌍 " + name + " " +  strconv.FormatUint(host_fourtyTwo(), 10))
 }
 
 

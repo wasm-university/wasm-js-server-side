@@ -6,11 +6,18 @@ import (
 	"fmt"
 	"log"
 	"os"
-
+  "unsafe"
 	"github.com/tetratelabs/wazero"
 	"github.com/tetratelabs/wazero/api"
 	"github.com/tetratelabs/wazero/wasi_snapshot_preview1"
 )
+
+func stringToPtr(s string) (uint32, uint32) {
+	buf := []byte(s)
+	ptr := &buf[0]
+	unsafePtr := uintptr(unsafe.Pointer(ptr))
+	return uint32(unsafePtr), uint32(len(buf))
+}
 
 func main() {
 	// Choose the context to use for function calls.
@@ -30,8 +37,9 @@ func main() {
     ExportFunction("host_fourtyTwo", func() uint64 {
       return uint64(42)
     }).
-    ExportedFunction("host_tada", func() string {
-      return "tada 🎉"
+    ExportFunction("host_tada", func() uint32 {
+      ptr, _ := stringToPtr("tada")
+      return ptr
     }).
 		Instantiate(ctx, r)
 	if err != nil {
