@@ -32,15 +32,36 @@ func main() {
   // === Host Function ===
 	// Instantiate a Go-defined module named "env" that exports a function to
 	// log to the console.
+
+  /*
+    - https://github.com/tetratelabs/wazero/blob/92ba4929e531812a51900bcde36037c5d19c453a/internal/integration_test/bench/bench_test.go
+    ==> getRandomString
+
+    - https://github.com/tetratelabs/wazero/blob/92ba4929e531812a51900bcde36037c5d19c453a/internal/integration_test/bench/testdata/case.go
+
+  */
+
+	getString := func(ctx context.Context, m api.Module, retBufPtr uint32, retBufSize uint32) {
+		results, err := m.ExportedFunction("allocate_buffer").Call(ctx, 10)
+		if err != nil {
+			log.Panicln(err)
+		}
+
+		offset := uint32(results[0])
+		m.Memory().WriteUint32Le(ctx, retBufPtr, offset)
+		m.Memory().WriteUint32Le(ctx, retBufSize, 10)
+
+		m.Memory().Write(ctx, offset, []byte("0123456789"))
+
+	}
+
+
 	_, err := r.NewModuleBuilder("env").
 		ExportFunction("host_log", logString).
     ExportFunction("host_fourtyTwo", func() uint64 {
       return uint64(42)
     }).
-    ExportFunction("host_tada", func() uint32 {
-      ptr, _ := stringToPtr("tada")
-      return ptr
-    }).
+    ExportFunction("host_get_string", getString).
 		Instantiate(ctx, r)
 	if err != nil {
 		log.Panicln(err)

@@ -22,14 +22,36 @@ func log(message string) {
 //go:wasm-module env
 
 
+//export allocate_buffer
+func allocateBuffer(size uint32) *byte {
+	// Allocate the in-Wasm memory region and returns its pointer to hosts.
+	// The region is supposed to store random strings generated in hosts,
+	// meaning that this is called "inside" of get_random_string.
+	buf := make([]byte, size)
+	return &buf[0]
+}
+
+//export host_get_string
+func host_get_string(retBufPtr **byte, retBufSize *int)
+
+// Get random string from the hosts.
+func getString() string {
+	var bufPtr *byte
+	var bufSize int
+	host_get_string(&bufPtr, &bufSize)
+	//nolint
+	return *(*string)(unsafe.Pointer(&reflect.SliceHeader{
+		Data: uintptr(unsafe.Pointer(bufPtr)),
+		Len:  uintptr(bufSize),
+		Cap:  uintptr(bufSize),
+	}))
+}
+
 //export host_log
 func host_log(ptr uint32, size uint32)
 
 //export host_fourtyTwo
 func host_fourtyTwo() uint64
-
-//export host_tada
-func host_tada() uint32
 
 
 // helloWorld is a WebAssembly export that accepts a string pointer (linear memory
@@ -38,9 +60,8 @@ func host_tada() uint32
 func helloWorld(ptr, size uint32) {
 	name := ptrToString(ptr, size)
 
-  tada_message := host_tada()
 
-	log("wasm >> 🖐️ hello world 🌍 " + name + " " +  strconv.FormatUint(host_fourtyTwo(), 10))
+	log("wasm >> 🖐️ hello world 🌍 " + name + " " +  strconv.FormatUint(host_fourtyTwo(), 10) + " " + getString())
 }
 
 
